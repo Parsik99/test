@@ -30,6 +30,40 @@
         </form>
     </div>
 </div>
-<a href="/add">Создать</a>
 
 
+<?= $this->section('content') ?>
+<div class="actionbutton mt-2">
+    <a class="btn btn-info float-right mb20" href="/add">Создать</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>№</th>
+        <th>Проверяемый СПМ</th>
+        <th>Контролирующий орган</th>
+        <th>Период проверки</th>
+        <th>Период проверки</th>
+        <th>Длительность</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php for ($i = 0; $i < count($checks); $i++): ?>
+<tr>
+    <td><?= $checks[$i]['id'] ?></td>
+    <td><?= $checks[$i]['subject_id'] ?></td>
+    <td><?= $checks[$i]['authority_id'] ?></td>
+    <td><?= $checks[$i]['start_date'] ?></td>
+    <td><?= $checks[$i]['finish_date'] ?></td>
+    <td><?= $checks[$i]['duration'] ?></td>
+    <td align="center">
+        <a class="btn btn-sm btn-info" href="#">Редактировать</a>
+        <a class="btn btn-sm btn-danger" href="#">Удалить</a>
+    </td>
+</tr>
+    <?php endfor; ?>
+    </tbody>
+</table>

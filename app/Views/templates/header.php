@@ -11,7 +11,9 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">РЕЕСТР</a>
+    <a class="navbar-brand" href="#">
+        <img src="/brand.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Reestr</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
         <span class="navbar-toggler-icon"></span>
@@ -31,12 +33,12 @@
                     Файл
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">Реестр</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Действие</a>
-                        <a class="dropdown-item" href="#">Другое действие</a>
+                        <a class="dropdown-item" href="#">Добавить</a>
+                        <a class="dropdown-item" href="#">Exel</a>
                     </div>
                     <a class="dropdown-item" href="#">Загрузить из Exel</a>
                     <div class="dropdown-divider"></div>

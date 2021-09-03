@@ -1,12 +1,14 @@
 <h1>Добавление проверки</h1>
+
 <div class="container">
     <div class="content-list">
-        <form method="post" enctype="multipart/form-data">
+        <form action="create" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-group"><label>Выберите СМП
                         <select class="form-control" name="name">
-                            <option value="1">ООО "Колосок"</option>
-                            <option value="2">ООО "Васильев и Ко"</option>
+                            <?php foreach ($subjects as $subject): ?>
+                                <option value="<?= $subject['id'] ?>"><?= $subject['name'] ?></option>
+                            <?php endforeach; ?>
                         </select><br>
                     </label></div>
                 <div class="form-group">
