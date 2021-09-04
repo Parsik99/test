@@ -53,15 +53,15 @@
     <tbody>
     <?php for ($i = 0; $i < count($checks); $i++): ?>
 <tr>
-    <td><?= $checks[$i]['id'] ?></td>
+    <td><?= $i+1?></td>
     <td><?= $checks[$i]['subject_id'] ?></td>
     <td><?= $checks[$i]['authority_id'] ?></td>
     <td><?= $checks[$i]['start_date'] ?></td>
     <td><?= $checks[$i]['finish_date'] ?></td>
     <td><?= $checks[$i]['duration'] ?></td>
     <td align="center">
-        <a class="btn btn-sm btn-info" href="#">Редактировать</a>
-        <a class="btn btn-sm btn-danger" href="#">Удалить</a>
+        <a class="btn btn-sm btn-info" href="<?= site_url('/edit/'.$checks[$i]['id'])?>">Редактировать</a>
+        <a class="btn btn-sm btn-danger" href="<?= site_url('home/delete/'.$checks[$i]['id'])?>">Удалить</a>
     </td>
 </tr>
     <?php endfor; ?>

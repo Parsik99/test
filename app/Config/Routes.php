@@ -35,6 +35,8 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 $routes->get('/add', 'Home::add');
 $routes->post('/create', 'Home::create');
+$routes->get('/edit/(:any)', 'Home::edit/$1');
+$routes->post('/edit/(:any)', 'Home::edit/$1');
 
 /*
  * --------------------------------------------------------------------

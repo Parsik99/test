@@ -48,4 +48,37 @@ class Home extends BaseController
         }
         $this->response->redirect(site_url('/add'));
     }
+
+    public function delete($id)
+    {
+        $model = new CheckModel();
+        $model->delete($id);
+
+        return $this->response->redirect(site_url('/'));
+    }
+
+    public function edit($id)
+    {
+        $model = new CheckModel();
+        $subjectModel = new SubjectsModel();
+        $authorityModel = new SupervisoryAuthoritiesModel();
+
+        $data['subjects'] = $subjectModel->findAll();
+
+        $data['supervisory'] = $authorityModel->findAll();
+
+        $data['id'] = $id;
+        $data['title'] = ucfirst('Форма редактирования');
+        if (isset($_POST['subject_id'])) {
+            $model->update($id, $_POST);
+
+            return $this->response->redirect(site_url('/'));
+        } else {
+            $data['checks'] = $model->find($id);
+        }
+
+        echo view('templates/header', $data);
+        echo view('checks/edit_views', $data);
+        echo view('templates/footer');
+    }
 }
