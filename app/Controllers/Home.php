@@ -10,12 +10,59 @@ class Home extends BaseController
 {
     public function index()
     {
-        $model = new CheckModel();
-        $data['checks'] = $model->findAll();
+        $checksModel = new CheckModel();
+        $subjectModel = new SubjectsModel();
+        $authorityModel = new SupervisoryAuthoritiesModel();
+
+        $subjectsMap = [];
+        $subjects = $subjectModel->findAll();
+        foreach ($subjects as $subject) {
+            $subjectsMap[$subject['id']] = $subject['name'];
+        }
+        $data['subjects'] = $subjectsMap;
+
+        $authorityMap = [];
+        $authority = $authorityModel->findAll();
+        foreach ($authority as $aut) {
+            $authorityMap[$aut['id']] = $aut['name'];
+        }
+        $data['authority'] = $authorityMap;
+        /* $data['supervisory'] = $authorityModel->findAll();*/
+
+        $filter = [
+            'subject_id' => $this->request->getGet('subject_id'),
+            'authority_id' => $this->request->getGet('authority_id'),
+            'duration' => $this->request->getGet('duration'),
+            'start_date' => $this->request->getGet('periodFrom'),
+            'finish_date' => $this->request->getGet('periodTo'),
+        ];
+
+        if ($filter['subject_id']) {
+            $checksModel->where('subject_id', $filter['subject_id']);
+        }
+
+        if ($filter['authority_id']) {
+            $checksModel->where('authority_id', $filter['authority_id']);
+        }
+
+        if ($filter['duration']) {
+            $checksModel->where('duration', $filter['duration']);
+        }
+
+        if ($filter['start_date']) {
+            $checksModel->where('start_date', $filter['start_date']);
+        }
+
+        if ($filter['finish_date']) {
+            $checksModel->where('finish_date', $filter['finish_date']);
+        }
+
+        $data['checks'] = $checksModel->findAll();
+        $data['filter'] = $filter;
         $data['title'] = ucfirst('Перечень плановых проверок');
 
         echo view('templates/header', $data);
-        echo view('checks_index');
+        echo view('checks_index', $data);
         echo view('templates/footer');
     }
 
@@ -23,7 +70,6 @@ class Home extends BaseController
     {
         $subjectModel = new SubjectsModel();
         $authorityModel = new SupervisoryAuthoritiesModel();
-
         $data['subjects'] = $subjectModel->findAll();
         $data['supervisory'] = $authorityModel->findAll();
 
