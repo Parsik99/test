@@ -21,17 +21,17 @@
             <div class="row">
                 <div class="form-group">
                     <label>Период проверки с
-                        <input class="form-control" type="date" name="periodFrom"/></label><br></div>
+                        <input required class="form-control" type="date" name="periodFrom"/></label><br></div>
 
                 <div class="form-group">
                     <label>по
-                        <input class="form-control" type="date" name="periodTo"/></label><br></div>
+                        <input required class="form-control" type="date" name="periodTo"/></label><br></div>
             </div>
 
 
             <div class="form-group">
                 <label>Плановая длительность проверки<br>
-                    <input class="form-control" type="number" name="duration"/></label><br></div>
+                    <input required class="form-control" type="number" name="duration"/></label><br></div>
 
             <button type="submit" class="btn btn-primary">Добавить</button>
         </form>

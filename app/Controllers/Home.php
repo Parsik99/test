@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\CheckModel;
 use App\Models\SubjectsModel;
 use App\Models\SupervisoryAuthoritiesModel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Home extends BaseController
 {
@@ -27,7 +29,6 @@ class Home extends BaseController
             $authorityMap[$aut['id']] = $aut['name'];
         }
         $data['authority'] = $authorityMap;
-        /* $data['supervisory'] = $authorityModel->findAll();*/
 
         $filter = [
             'subject_id' => $this->request->getGet('subject_id'),
@@ -58,6 +59,31 @@ class Home extends BaseController
         }
 
         $data['checks'] = $checksModel->findAll();
+
+        $spreadSheet = new Spreadsheet();
+        $sheet = $spreadSheet->getActiveSheet();
+        $columns = [
+            'A1' => 'Проверяемый СПМ',
+            'B1' => 'Контролируемый орган',
+            'C1' => 'Период проверки с',
+            'D1' => 'Период проверки по',
+            'E1' => 'Длительность',
+        ];
+        foreach ($columns as $key => $value) {
+            $sheet->setCellValue($key, $value);
+        }
+
+        for ($i = 1; $i < count($data['checks']); $i++) {
+            $sheet->setCellValue('A' . ($i + 1), $subjectsMap[$data['checks'][$i]['subject_id']]);
+            $sheet->setCellValue('B' . ($i + 1), $authorityMap[$data['checks'][$i]['authority_id']]);
+            $sheet->setCellValue('C' . ($i + 1), (new \DateTime($data['checks'][$i]['start_date']))->format('d.m.Y'));
+            $sheet->setCellValue('D' . ($i + 1), (new \DateTime($data['checks'][$i]['finish_date']))->format('d.m.Y'));
+            $sheet->setCellValue('E' . ($i + 1), $data['checks'][$i]['duration']);
+        }
+
+        $writer = new Xlsx($spreadSheet);
+        $writer->save('test.xlsx');
+
         $data['filter'] = $filter;
         $data['title'] = ucfirst('Перечень плановых проверок');
 
@@ -96,6 +122,7 @@ class Home extends BaseController
     }
 
     public function delete($id)
+
     {
         $model = new CheckModel();
         $model->delete($id);
@@ -110,7 +137,6 @@ class Home extends BaseController
         $authorityModel = new SupervisoryAuthoritiesModel();
 
         $data['subjects'] = $subjectModel->findAll();
-
         $data['supervisory'] = $authorityModel->findAll();
 
         $data['id'] = $id;
@@ -120,7 +146,7 @@ class Home extends BaseController
 
             return $this->response->redirect(site_url('/'));
         } else {
-            $data['checks'] = $model->find($id);
+            $data['check'] = $model->find($id);
         }
 
         echo view('templates/header', $data);
@@ -128,3 +154,4 @@ class Home extends BaseController
         echo view('templates/footer');
     }
 }
+

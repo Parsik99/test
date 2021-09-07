@@ -66,7 +66,11 @@
 
 <?= $this->section('content') ?>
 <div class="actionbutton mt-2">
-    <a class="btn btn-info float-right mb20" href="/add">Создать</a>
+    <a class="btn btn-success float-right mb20" href="/add">Создать</a>
+</div>
+
+<div class="actionbutton mt-2">
+    <a class="btn btn-warning  float-right mb20" href="test.xlsx"  download="test.xlsx">Скачать Exel</a>
 </div>
 
 <?php if (count($checks) == 0): ?>
