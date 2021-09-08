@@ -16,7 +16,7 @@ class Home extends BaseController
         $checksModel = new CheckModel();
         $subjectModel = new SubjectsModel();
         $authorityModel = new SupervisoryAuthoritiesModel();
-
+        //получение данных и преобразование их в удобный для селекта вид
         $subjectsMap = [];
         $subjects = $subjectModel->findAll();
         foreach ($subjects as $subject) {
@@ -30,7 +30,7 @@ class Home extends BaseController
             $authorityMap[$aut['id']] = $aut['name'];
         }
         $data['authority'] = $authorityMap;
-//
+        //Сохранение значений фильтров
         $filter = [
             'subject_id' => $this->request->getGet('subject_id'),
             'authority_id' => $this->request->getGet('authority_id'),
@@ -38,7 +38,7 @@ class Home extends BaseController
             'start_date' => $this->request->getGet('periodFrom'),
             'finish_date' => $this->request->getGet('periodTo'),
         ];
-
+        //При наличии значения фильтра добавляется условие в запрос поиска
         if ($filter['subject_id']) {
             $checksModel->where('subject_id', $filter['subject_id']);
         }
@@ -58,9 +58,10 @@ class Home extends BaseController
         if ($filter['finish_date']) {
             $checksModel->where('finish_date', $filter['finish_date']);
         }
-
+        // Получаем проверки с учетом фильтров
         $data['checks'] = $checksModel->findAll();
 
+        //Создание таблицы Excel
         $spreadSheet = new Spreadsheet();
         $sheet = $spreadSheet->getActiveSheet();
         $columns = [
@@ -81,18 +82,18 @@ class Home extends BaseController
             $sheet->setCellValue('D' . ($i + 1), (new \DateTime($data['checks'][$i]['finish_date']))->format('d.m.Y'));
             $sheet->setCellValue('E' . ($i + 1), $data['checks'][$i]['duration']);
         }
-
+        //Создание файла, в котором будет сохранятся таблица
         $writer = new Xlsx($spreadSheet);
         $writer->save('test.xlsx');
 
         $data['filter'] = $filter;
         $data['title'] = ucfirst('Перечень плановых проверок');
-
+        //Отрисовка главной страницы сайта
         echo view('templates/header', $data);
         echo view('checks_index', $data);
         echo view('templates/footer');
     }
-
+    //Отображение формы создания
     public function add()
     {
         $subjectModel = new SubjectsModel();
@@ -105,11 +106,11 @@ class Home extends BaseController
         echo view('checks/checks_views', $data);
         echo view('templates/footer');
     }
-
+    //Обработка фрмы создания проверки
     public function create()
     {
         $model = new CheckModel();
-
+        //Создание записи в бд
         if ($model->save([
             'subject_id' => $this->request->getPost('name'),
             'authority_id' => $this->request->getPost('supervisory'),
@@ -117,20 +118,20 @@ class Home extends BaseController
             'finish_date' => $this->request->getPost('periodTo'),
             'duration' => $this->request->getPost('duration'),
         ])) {
+            //Переход на главную в случае успеха
             return $this->response->redirect(site_url('/'));
         }
         $this->response->redirect(site_url('/add'));
     }
-
+    //Удаление проверки
     public function delete($id)
-
     {
         $model = new CheckModel();
         $model->delete($id);
 
         return $this->response->redirect(site_url('/'));
     }
-
+    //Редоктирование проверки
     public function edit($id)
     {
         $model = new CheckModel();
@@ -142,11 +143,13 @@ class Home extends BaseController
 
         $data['id'] = $id;
         $data['title'] = ucfirst('Форма редактирования');
+
         if (isset($_POST['subject_id'])) {
-            $model->update($id, $_POST);
+            $model->update($id, $_POST);//сохраняем новые значения
 
             return $this->response->redirect(site_url('/'));
         } else {
+            //Ищим в бд запись с нужным айдишником для дальнейшего обновления
             $data['check'] = $model->find($id);
         }
 
