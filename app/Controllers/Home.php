@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Home extends BaseController
 {
+    //Функция отрисовки главной страницы
     public function index()
     {
         $checksModel = new CheckModel();
@@ -29,7 +30,7 @@ class Home extends BaseController
             $authorityMap[$aut['id']] = $aut['name'];
         }
         $data['authority'] = $authorityMap;
-
+//
         $filter = [
             'subject_id' => $this->request->getGet('subject_id'),
             'authority_id' => $this->request->getGet('authority_id'),

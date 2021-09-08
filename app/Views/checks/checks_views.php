@@ -14,8 +14,9 @@
                 <div class="form-group">
                     <label>Контролирующий орган
                         <select class="form-control" name="supervisory">
-                            <option value="1">Роспотребнадзор</option>
-                            <option value="2">Природоохрана</option>
+                            <?php foreach ($supervisory as $authority): ?>
+                                <option value="<?= $authority['id'] ?>"><?= $authority['name'] ?></option>
+                            <?php endforeach; ?>
                         </select></div>
             </div>
             <div class="row">
